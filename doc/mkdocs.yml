@@ -1,0 +1,18 @@
+site_name: Link stream doc
+site_url: https://example.com
+
+theme:
+    name: readthedocs
+nav:
+    - Home: home.md
+    - Install: install.md
+    - Data Processing: data_processing.md
+    - Decomposition: decomposition.md
+    - Examples: examples.md
+    - Licences: licences.md
+
+markdown_extensions:
+    - toc:
+        permalink: "#"
+        separator: "_"
+    

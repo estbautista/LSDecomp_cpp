@@ -1,0 +1,2 @@
+Bastien Guillemare (bastien.guillemare@etu.sorbonne-universite.fr) - wavelet transform, data processing, mapping BFS & SVD 
+Esteban Bautista - Supervision, corrections, tests. 

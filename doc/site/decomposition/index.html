@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://example.com/decomposition/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Decomposition - Link stream doc</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Decomposition";
+        var mkdocs_page_input_path = "decomposition.md";
+        var mkdocs_page_url = "/decomposition/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Link stream doc
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../home/">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../install/">Install</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../data_processing/">Data Processing</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Decomposition</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#organization">Organization</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initialization">Initialization</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#transform_workspace">Transform workspace</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#decomposition_result_matrix">Decomposition Result Matrix</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#mapping">Mapping</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#bfs">BFS</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#svd">SVD</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#transform_graph">Transform graph</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#transform_linkstream">Transform linkstream</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example">Example</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../examples/">Examples</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../licences/">Licences</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Link stream doc</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li><li>Decomposition</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <style>
+p.function{
+    color:#357ab7;
+    background:#e0e8f3;
+    border-top:4px solid #5897cf;
+    padding:0.3em 0.3em 0.3em 0.3em;
+    margin-bottom:0em;
+    font-weight: bold;
+}
+</style>
+
+<h1 id="decomposition">Decomposition<a class="headerlink" href="#decomposition" title="Permanent link">#</a></h1>
+<p>This chapter describes functions for performing Haar wavelet transform.<br />
+Some of these type structure are based on <strong>gsl</strong> or <strong>Armadillo</strong> library.<br />
+The wavelet functions are declared in the header file <strong><code>decomposition.h</code></strong>.
+The mapping functions are declared in the header files <strong><code>mapping_BFS.h</code></strong> and <strong><code>mapping_SVD.h</code></strong>.</p>
+<hr/>
+
+<h2 id="organization">Organization<a class="headerlink" href="#organization" title="Permanent link">#</a></h2>
+<p>This module is internally divided into 3 submodules :<br />
+ - <strong><code>decomposition.h</code></strong> for wavelet decomposition with different mapping<br />
+ - <strong><code>mapping_BFS.h</code></strong> to run <strong>B</strong>readth-<strong>Fi</strong>rst <strong>S</strong>earch mapping<br />
+ - <strong><code>mapping_SVD.h</code></strong> to run <strong>S</strong>ingular <strong>V</strong>alue <strong>D</strong>ecomposition mapping</p>
+<hr/>
+
+<h2 id="initialization">Initialization<a class="headerlink" href="#initialization" title="Permanent link">#</a></h2>
+<h3 id="transform_workspace">Transform workspace<a class="headerlink" href="#transform_workspace" title="Permanent link">#</a></h3>
+<p><strong>Type sp_workspace</strong><br />
+This structure contains a sparse matrix to hold intermediate results the transform.</p>
+<p class="function">sp_workspace * sp_workspace_graph_alloc (size_t size1, size_t size2 = 1)</p>
+<p>This function allocates memory for structure variable of sp_workspace.</p>
+<p class="function">void sp_workspace_delete (sp_workspace * work)</p>
+<p>This function releases allocated memory of sp_workspace structure variable.</p>
+<h3 id="decomposition_result_matrix">Decomposition Result Matrix<a class="headerlink" href="#decomposition_result_matrix" title="Permanent link">#</a></h3>
+<p>The wavelet decomposition will segment data into 2 parts : <strong>A</strong>ccuracy and <strong>D</strong>ifference.
+To hold these results, we use a dense matrix A for the <strong>A</strong>ccuracy part and a sparse matrix for the <strong>D</strong>ifference part.<br />
+The first dimension of these matrices depend on the size of the data and number of level you run. The second dimension is the number of graph in your graph sequence (1 for a simple graph).</p>
+<p class="function">size_t size1A (size_t n, uint level)</p>
+<p>This function returns the size of the first dimension for a dense matrix A to hold result from <code>level</code> wavelet transform of size n. (use for allocation)</p>
+<p class="function">size_t size1D (size_t n, uint level)</p>
+<p>This function returns the size of the first dimension for a sparse matrix D to hold result from <code>level</code> wavelet transform of size n. (use for allocation)</p>
+<p class="function">gsl_matrix * matrixA_alloc (size_t dim1, size_t dim2, uint level)</p>
+<p class="function">gsl_matrix * matrixA_alloc (map_edge *m, uint level, size_t n_graphs = 1)</p>
+<p class="function">gsl_matrix * matrixA_alloc (graph *g, uint level)</p>
+<p>These functions allocate memory for dense matrix A.</p>
+<p class="function">gsl_spmatrix * matrixD_alloc (size_t dim1, size_t dim2, uint level)</p>
+<p class="function">gsl_spmatrix * matrixD_alloc (map_edge *m, uint level, size_t n_graphs = 1)</p>
+<p class="function">gsl_spmatrix * matrixD_alloc (graph *g, uint level)</p>
+<p>These functions allocate memory for sparse matrix D.</p>
+<p class="function">void matrixA_delete (gsl_matrix *A)</p>
+<p>This function releases allocated memory of dense matrix A.</p>
+<p class="function">void matrixD_delete (gsl_spmatrix *D)</p>
+<p>This function releases allocated memory of sparse matrix D.</p>
+<hr/>
+
+<h2 id="mapping">Mapping<a class="headerlink" href="#mapping" title="Permanent link">#</a></h2>
+<p>There is map to store unique if of each edge (<strong><a href="../data_processing/#linkstream-types">map_edge</a></strong>) and other for each node (<strong><a href="../data_processing/#linkstream-types">map_node</a></strong>).</p>
+<h3 id="bfs">BFS<a class="headerlink" href="#bfs" title="Permanent link">#</a></h3>
+<p>This mapping follows <strong>B</strong>readth-<strong>Fi</strong>rst <strong>S</strong>earch order of a graph to give id to each edges and hold the result in a <strong><a href="../data_processing/#linkstream-types">map_edge</a></strong>.</p>
+<p class="function">map_edge * map_edge_alloc ( )</p>
+<p>This function allocates memory for map_edge structure variable.</p>
+<p class="function">void map_edge_delete (map_edge *m)</p>
+<p>This function releases allocated memory of map_edge structure variable.</p>
+<p class="function">int mapping_BFS (graph *g, map_edge *m)</p>
+<p>This function fills <strong><code>m</code></strong> (<strong><a href="../data_processing/#linkstream-types">map_edge</a></strong>) by processing BFS algorithm on <strong><code>g</code></strong> (<strong><a href="../data_processing/#linkstream-types">graph</a></strong>).</p>
+<h3 id="svd">SVD<a class="headerlink" href="#svd" title="Permanent link">#</a></h3>
+<p>This mapping computes the adjacency matrix of a graph and does <strong>S</strong>ingular <strong>V</strong>alue <strong>D</strong>ecomposition recursively on it to relabelized each node. Then we can use the function fct_edge_graph who returns an unique id ( |VxV| ) for each edge by giving the label of the twice nodes.</p>
+<p class="function">map_node * map_node_alloc ( )</p>
+<p>This function allocates memory for map_node structure variable.</p>
+<p class="function">void map_node_delete (map_node *m)</p>
+<p>This function releases allocated memory of map_node structure variable.</p>
+<p class="function">int mapping_SVD (graph *g, map_node *m)</p>
+<p>This function fills <strong><code>m</code></strong> (<strong><a href="../data_processing/#linkstream-types">map_node</a></strong>) by processing recursively SVD on the adjacency matrix of <strong><code>g</code></strong> (<strong><a href="../data_processing/#linkstream-types">graph</a></strong>).</p>
+<p class="function">int fct_map_edge (int i, int j)</p>
+<p>This mapping function returns an unique edge id (|VxV|) by giving 2 nodes labels (i-&gt;j).</p>
+<hr/>
+
+<h2 id="transform_graph">Transform graph<a class="headerlink" href="#transform_graph" title="Permanent link">#</a></h2>
+<p class="function">int max_lvl_decomposition (graph *g)</p>
+<p class="function">int max_lvl_decomposition (map_edge *m)</p>
+<p>These functions return the maximum level of  wavelet decomposition you can compute.</p>
+<p class="function">int wavelet_transform_by_level (const gsl_wavelet * w, gsl_spmatrix *data, size_t n, gsl_wavelet_direction dir, sp_workspace * work, uint nb_level = 1, uint current_lvl = 0)</p>
+<p>This function computes <strong><code>nb_level</code></strong> haar wavelet transform from <strong><code>current_lvl</code></strong> in the direction <strong><code>dir</code></strong>. A sparse matrix of data and a sparse worspace <strong><code>work</code></strong> with a size <strong><code>n</code></strong> has to be provided. To perform wavelet transform, gsl_wavelet <strong><code>w</code></strong> has be to initialized as gsl_wavelet_haar and k = 2.</p>
+<p class="function">int decomposition_BFS (graph *g, map_edge *m, uint level, gsl_matrix *A, gsl_matrix *D)</p>
+<p class="function">int decomposition_SVD (graph *g, map_node *m, uint level, gsl_matrix *A, gsl_matrix *D)</p>
+<p>These functions compute decomposition of graph with haar wavelet transform, following the indicated mapping (<strong><a href="#bfs">BFS</a></strong> or <strong><a href="#svd">SVD</a></strong>) and fill matrix A (resp. D) with the accuracy (resp. difference) part. Memory for matrices A et D has to be allocated with appropriate sizes (see functions : <strong><a href="#decomposition-result-matrix">size1A</a></strong>,  <strong><a href="#decomposition-result-matrix">size1D</a></strong>).</p>
+<hr/>
+
+<h2 id="transform_linkstream">Transform linkstream<a class="headerlink" href="#transform_linkstream" title="Permanent link">#</a></h2>
+<p class="function">int aggregate_link_stream (float_lien *fl, graph *g)</p>
+<p>This function fills <strong><code>g</code></strong> (<strong><a href="data_processing#linkstream-types">graph</a></strong>) as the aggregation of graphs for all time in <strong><code>fl</code></strong> (<strong><a href="data_processing#linkstream-types">float_lien</a></strong>).<br />
+Memory has to be allocated for <strong><code>g</code></strong>. (Use for graph decomposition)</p>
+<p class="function">int graph_sequence_decomposition_BFS (graph_set *gs, map_edge *m, uint level, gsl_matrix *A, gsl_spmatrix *D)</p>
+<p>This function computes the decomposition of graph sequence with haar wavelet transform, following BFS mapping <strong><code>m</code></strong> and fill matrix A (resp. D) with the accuracy (resp. difference) part. Memory for matrices A et D has to be allocated with size2 equal to number of graph in the sequence and size1 with the appropriate value (see functions : <strong><a href="#decomposition-result-matrix">size1A</a></strong>,  <strong><a href="#decomposition-result-matrix">size1D</a></strong>).</p>
+<hr/>
+
+<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">#</a></h2>
+<p><strong> Wavelet Decomposition with SVD mapping : </strong></p>
+<pre><code class="language-c">// example.cpp
+#include &quot;lib/data_processing.hpp&quot;
+#include &quot;lib/decomposition.h&quot;
+
+int main(int argc, char **argv)
+{
+    /* Initialisation */
+    (void)(argc); /* avoid unused parameter warning */
+    std::string path = argv[1];
+    float_lien *fl = float_lien_alloc();
+    map_node *m = map_node_alloc();
+    graph *g = new graph();
+    gsl_matrix *A;
+    gsl_spmatrix *D;
+
+    std::cout &lt;&lt; &quot;===== Data processing =====\n&quot;;
+    read_link_stream(path, fl);
+    std::cout &lt;&lt; &quot;===== End Data processing =====\n&quot;;
+
+    /* Aggregation of graphs for all time in fl */
+    aggregate_link_stream(fl, g);
+
+    std::cout &lt;&lt; &quot;===== MAPPING =====\n&quot;;
+    mapping_SVD(g, m);
+    std::cout &lt;&lt; &quot;===== End Mapping =====\n&quot;;
+
+    std::cout &lt;&lt; &quot;===== Decomposition =====\n&quot;;
+    uint level = max_lvl_decomposition(g);
+    A = matrixA_alloc(g, level);
+    D = matrixD_alloc(g, level);
+    decomposition_SVD(g, m, level, A, D);
+    std::cout &lt;&lt; &quot;===== FIN Decomposition =====\n&quot;;
+
+    /* Release memory */
+    matrixA_delete(A);
+    matrixD_delete(D);
+    float_lien_delete(fl);
+    map_node_delet(m);
+    delete g;
+
+    return 0;
+}
+</code></pre>
+<p>Compile with :<br />
+<code>g++ ...</code></p>
+<p>Run with :<br />
+<code>./example relative_path/file_linkstream.txt</code></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../data_processing/" class="btn btn-neutral float-left" title="Data Processing"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../examples/" class="btn btn-neutral float-right" title="Examples">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../data_processing/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
